@@ -2,22 +2,21 @@
 
 This is a [Next.js](https://nextjs.org) project that implements an interactive timeline component for visualizing events.
 
+🚀 **Live Demo**: [https://timeline-manager.vercel.app/](https://timeline-manager.vercel.app/)
+
 ## Project Overview
 
 This project implements a timeline visualization component with the following features:
-- Space-efficient event layout that optimizes horizontal lanes
 - Drag and drop functionality to modify event dates
-- Month, week, and day view options
-- Zoom controls for timeline navigation
-- Inline event name editing
-- Responsive design that works across different screen sizes
+- Zoom controls for timeline navigation (Month, week, and day view options)
+- Event editing
 
 ## Getting Started
 
 1. Clone the repository:
 ```bash
-git clone [your-repo-url]
-cd [project-directory]
+git clone https://github.com/feligomes/Timeline
+cd Timeline
 ```
 
 2. Install dependencies:
@@ -42,13 +41,15 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 I spent approximately 4 hours implementing this project.
 
 ### Design Decisions
-- The timeline layout algorithm prioritizes space efficiency while maintaining readability
+- Used Shadcn UI to create a modern look and feel aswell as an future-proof component library
 - Used React Beautiful DND for smooth drag-and-drop interactions
-- Implemented multiple calendar views (month/week/day) for better user experience, this works as a zoom level
+- Managed date-fns to handle date manipulations
+- Implemented multiple calendar views (month/week/day) for better user experience
 
 ### Features I Like
 - The overall look and feel of the application
-- The advanced drag and drop functionality that allows moving events by individual days
+- The possibility to add new events and use custom colors for each one making them easier to identify
+- The drag and drop functionality that allows moving events by specific days. You can for example move the 3rd day of the event to another day and the event will be updated accordingly
 - The intuitive interface for event management
 - The flexibility to view the calendar in different time scales (month/week/day)
 - The possiblity to easily update existing events
