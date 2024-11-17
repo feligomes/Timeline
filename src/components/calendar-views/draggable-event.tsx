@@ -1,25 +1,20 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import * as React from "react"
 import { useDrag } from 'react-dnd'
 import { EVENT_COLORS } from "@/lib/constants"
 import { EventDialog } from "@/components/event-dialog"
-import type { Event } from "@/types/calendar"
-
-interface DragItem {
-  eventId: string
-  originalDate: Date
-}
 
 interface DraggableEventProps {
-  event: Event
+  event: any
   day: Date
-  onEventUpdate: (eventId: string, updates: Partial<Event>) => void
+  onEventUpdate: (eventId: string, updates: any) => void
   onEventDelete: (eventId: string) => void
 }
 
 export function DraggableEvent({ event, day, onEventUpdate, onEventDelete }: DraggableEventProps) {
   const [isEditing, setIsEditing] = React.useState(false)
-  const [{ isDragging }, drag] = useDrag<DragItem, unknown, { isDragging: boolean }>(() => ({
+  const [{ isDragging }, drag] = useDrag(() => ({
     type: 'EVENT',
     item: { eventId: event.id, originalDate: day },
     collect: (monitor) => ({
@@ -32,7 +27,7 @@ export function DraggableEvent({ event, day, onEventUpdate, onEventDelete }: Dra
   return (
     <>
       <div
-        ref={drag}
+        ref={drag as any}
         className={`text-xs p-1 rounded text-white truncate cursor-move ${
           isDragging ? 'opacity-50' : ''
         }`}

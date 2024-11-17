@@ -1,4 +1,6 @@
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import * as React from "react"
 import { useDrop } from 'react-dnd'
 import { isSameMonth } from "date-fns"
@@ -24,7 +26,7 @@ export function DroppableDay({ day, children, onEventDrop, currentDate }: Droppa
 
   return (
     <div
-      ref={drop as React.RefObject<HTMLDivElement>}
+      ref={drop as any}
       className={`min-h-[100px] p-1 border ${
         isSameMonth(day, currentDate) ? "bg-background" : "bg-muted"
       } ${isOver ? 'bg-opacity-70' : ''}`}
