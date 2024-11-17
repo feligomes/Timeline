@@ -7,9 +7,14 @@ This is a [Next.js](https://nextjs.org) project that implements an interactive t
 ## Project Overview
 
 This project implements a timeline visualization component with the following features:
-- Drag and drop functionality to modify event dates
+- Drag and drop functionality to modify event dates, from both the month and week views
 - Zoom controls for timeline navigation (Month, week, and day view options)
-- Event editing
+- Event editing by double clicking on the event, works from all views
+- Ability to add new custom events aswell as delete existing ones
+- It comes prepopulated with 3 events added on November 2024 as a small demo, new events can be added freely
+- The data resets if you reload the page, this could have been made persistent with a real backend, using localstorage or a database
+- Left it this way also a way to easilty reset the application for testing purposes
+- It correctly handles long names, showing a tooltip with the full name when hovering over the event 
 
 ## Getting Started
 
@@ -41,26 +46,25 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 I spent approximately 4 hours implementing this project.
 
 ### Design Decisions
-- Used Shadcn UI to create a modern look and feel aswell as an future-proof component library
+- Used Shadcn UI to create a modern look and feel aswell as using a future-proof component library
 - Used React Beautiful DND for smooth drag-and-drop interactions
 - Managed date-fns to handle date manipulations
-- Implemented multiple calendar views (month/week/day) for better user experience
+- I used Google Calendar as a reference for the design of the calendar
 
 ### Features I Like
 - The overall look and feel of the application
 - The possibility to add new events and use custom colors for each one making them easier to identify
 - The drag and drop functionality that allows moving events by specific days. You can for example move the 3rd day of the event to another day and the event will be updated accordingly
-- The intuitive interface for event management
-- The flexibility to view the calendar in different time scales (month/week/day)
-- The possiblity to easily update existing events
 
 ### Future Improvements
+- Redux could be used to manage the state of the application, this would allow for a better performance and scalability. Specially if we had more pages, and needed to manage the state accross them. 
 - Implement a real API backend for event management
 - Add user authentication and authorization
 - Show user-specific event data based on login
 - Improve responsiveness for small devices, potentially with a redesigned mobile-first interface
-- Add data persistence
-- Implement real-time updates
+- Implement real-time updates if we were to allow multiple users to interact with the same events
+- Add test coverage for the application
+- Go into depth into accessibility, making the application more usable. 
 
 ### Testing Approach
 I would implement a comprehensive testing strategy including:
