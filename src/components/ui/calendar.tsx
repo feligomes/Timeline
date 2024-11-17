@@ -1,10 +1,8 @@
 'use client'
 
 import {
-  ChevronDownIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
-  ChevronUpIcon,
 } from 'lucide-react'
 import * as React from 'react'
 import { DayFlag, DayPicker, SelectionState, UI } from 'react-day-picker'
@@ -28,18 +26,20 @@ export const Calendar = ({
       classNames={{
         [UI.Months]: 'relative',
         [UI.Month]: 'space-y-4 ml-0',
-        [UI.MonthCaption]: 'flex justify-center items-center h-7',
+        [UI.MonthCaption]: 'flex justify-center items-center h-7 mt-2 mr-2',
         [UI.CaptionLabel]: 'text-sm font-medium',
-        [UI.ButtonPrevious]: cn(
-          buttonVariants({ variant: 'outline' }),
-          'absolute left-1 top-0 h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100'
-        ),
-        [UI.ButtonNext]: cn(
-          buttonVariants({ variant: 'outline' }),
-          'absolute right-1 top-0 h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100'
-        ),
         [UI.MonthGrid]: 'w-full border-collapse space-y-1',
         [UI.Weekdays]: 'flex',
+        [UI.NextMonthButton]: cn(
+          buttonVariants({ variant: 'ghost' }),
+          'h-7 w-7 p-0 flex items-center justify-center bg-transparent hover:bg-transparent',
+          'border border-gray-200 rounded-sm mb-4 '
+        ),
+        [UI.PreviousMonthButton]: cn(
+          buttonVariants({ variant: 'ghost' }),
+          'h-7 w-7 p-0 flex items-center justify-center bg-transparent hover:bg-transparent',
+          'border border-gray-200 rounded-sm mb-4 mr-2'
+        ),
         [UI.Weekday]:
           'text-muted-foreground rounded-md w-9 font-normal text-[0.8rem]',
         [UI.Week]: 'flex w-full mt-2',
@@ -50,6 +50,7 @@ export const Calendar = ({
           'h-9 w-9 p-0 font-normal aria-selected:opacity-100 hover:bg-primary hover:text-primary-foreground'
         ),
         [SelectionState.range_end]: 'day-range-end',
+        [SelectionState.range_start]: 'day-range-start',
         [SelectionState.selected]:
           'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground',
         [SelectionState.range_middle]:
@@ -57,7 +58,6 @@ export const Calendar = ({
         [DayFlag.today]: 'bg-accent text-accent-foreground',
         [DayFlag.outside]:
           'day-outside text-muted-foreground opacity-50 aria-selected:bg-accent/50 aria-selected:text-muted-foreground aria-selected:opacity-30',
-        [DayFlag.disabled]: 'text-muted-foreground opacity-50',
         [DayFlag.hidden]: 'invisible',
         ...classNames,
       }}
@@ -75,10 +75,6 @@ const Chevron = ({ orientation = 'left' }) => {
       return <ChevronLeftIcon className="h-4 w-4" />
     case 'right':
       return <ChevronRightIcon className="h-4 w-4" />
-    case 'up':
-      return <ChevronUpIcon className="h-4 w-4" />
-    case 'down':
-      return <ChevronDownIcon className="h-4 w-4" />
     default:
       return null
   }

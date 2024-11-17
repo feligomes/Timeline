@@ -190,7 +190,7 @@ export default function EventCalendar() {
             </div>
           </div>
         </CardHeader>
-        <CardContent className="p-0">
+        <CardContent className="p-2">
           <ScrollArea className="h-[600px] flex items-center justify-center">
             <div className="p-4">
               {renderView()}
