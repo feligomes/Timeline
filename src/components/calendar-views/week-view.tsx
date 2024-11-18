@@ -3,15 +3,11 @@ import { format } from "date-fns"
 import { DroppableDay } from "./droppable-day"
 import { DraggableEvent } from "./draggable-event"
 import type { Event } from "@/types/calendar"
-import type { EventColor } from "@/lib/constants"
 
 interface WeekViewProps {
   daysToDisplay: Date[]
   currentDate: Date
   onEventDrop: (eventId: string, originalDate: Date, newDate: Date) => void
-  onEventUpdate: (eventId: string, updates: Partial<Event>) => void
-  onEventDelete: (eventId: string) => void
-  onAddEvent: (event: { title: string; start: string; end: string; color: EventColor }) => void
   getEventsForDay: (day: Date) => Event[]
 }
 
@@ -19,9 +15,6 @@ export function WeekView({
   daysToDisplay,
   currentDate,
   onEventDrop,
-  onEventUpdate,
-  onEventDelete,
-  onAddEvent,
   getEventsForDay
 }: WeekViewProps) {
   return (
@@ -44,9 +37,6 @@ export function WeekView({
                   key={event.id} 
                   event={event} 
                   day={day}
-                  onEventUpdate={onEventUpdate}
-                  onEventDelete={onEventDelete}
-                  onAddEvent={onAddEvent}
                 />
               ))}
             </div>

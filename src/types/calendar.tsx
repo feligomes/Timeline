@@ -1,5 +1,7 @@
 import type { EventColor } from "@/lib/constants"
 
+export type { EventColor }
+
 export interface Event {
   id: string
   title: string

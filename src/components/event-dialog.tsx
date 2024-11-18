@@ -4,42 +4,21 @@ import * as React from "react"
 import { format, parseISO } from "date-fns"
 import { CalendarIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Calendar } from "@/components/ui/calendar"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
 import { EVENT_COLORS, type EventColor } from "@/lib/constants"
 import { DateRange } from "react-day-picker"
+import { useAppDispatch } from "@/store/hooks"
+import { addEvent, updateEvent, deleteEvent } from "@/store/slices/eventsSlice"
 
 interface EventDialogProps {
   mode: 'add' | 'edit'
   open: boolean
   onOpenChange: (open: boolean) => void
-  onAddEvent: (event: { 
-    title: string
-    start: string  
-    end: string   
-    color: EventColor 
-  }) => void
-  onEventUpdate?: (eventId: string, updates: Partial<{ 
-    title: string
-    start: string
-    end: string
-    color: EventColor 
-  }>) => void
-  onEventDelete?: (eventId: string) => void
   event?: {
     id: string
     title: string
@@ -49,15 +28,8 @@ interface EventDialogProps {
   }
 }
 
-export function EventDialog({ 
-  mode, 
-  open, 
-  onOpenChange, 
-  onAddEvent, 
-  onEventUpdate, 
-  onEventDelete, 
-  event 
-}: EventDialogProps) {
+export function EventDialog({ mode, open, onOpenChange, event }: EventDialogProps) {
+  const dispatch = useAppDispatch()
   const [title, setTitle] = React.useState("")
   const [dateRange, setDateRange] = React.useState<DateRange | undefined>()
   const [selectedColor, setSelectedColor] = React.useState<EventColor>(EVENT_COLORS[0].id)
@@ -86,19 +58,22 @@ export function EventDialog({
     const start = format(dateRange.from, 'yyyy-MM-dd')
     const end = format(dateRange.to, 'yyyy-MM-dd')
 
-    if (mode === 'add' && onAddEvent) {
-      onAddEvent({ title, start, end, color: selectedColor })
-    } else if (mode === 'edit' && event && onEventUpdate) {
-      onEventUpdate(event.id, { title, start, end, color: selectedColor })
+    if (mode === 'add') {
+      dispatch(addEvent({ title, start, end, color: selectedColor }))
+    } else if (mode === 'edit' && event) {
+      dispatch(updateEvent({ 
+        id: event.id, 
+        updates: { title, start, end, color: selectedColor }
+      }))
     }
     
     onOpenChange(false)
   }
 
   const handleDelete = () => {
-    if (mode === 'edit' && event && onEventDelete) {
+    if (mode === 'edit' && event) {
       if (confirm('Are you sure you want to delete this event?')) {
-        onEventDelete(event.id)
+        dispatch(deleteEvent(event.id))
         onOpenChange(false)
       }
     }
