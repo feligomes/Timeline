@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { addDays, addMonths, addWeeks, subMonths, subWeeks, subDays, startOfMonth, endOfMonth, startOfWeek, endOfWeek, eachDayOfInterval, format, isWithinInterval, differenceInDays, startOfDay } from "date-fns"
+import { addDays, addMonths, addWeeks, subMonths, subWeeks, subDays, startOfMonth, endOfMonth, startOfWeek, endOfWeek, eachDayOfInterval, format, differenceInDays, startOfDay, parseISO } from "date-fns"
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
@@ -10,33 +10,23 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { EventDialog } from "@/components/event-dialog"
-import { EVENT_COLORS, type EventColor } from "@/lib/constants"
 import { MonthView } from "./calendar-views/month-view"
 import { WeekView } from "./calendar-views/week-view"
 import { DayView } from "./calendar-views/day-view"
+import { ViewMode } from "@/types/calendar"
+import { Event } from "@/types/calendar"
+import { EventColor } from "@/lib/constants"
 
-interface Event {
-  id: string
-  title: string
-  start: Date
-  end: Date
-  color: EventColor
+interface EventCalendarProps {
+  initialEvents: Event[]
 }
 
-const mockEvents: Event[] = [
-  { id: "1", title: "Vacation", start: new Date(new Date().getFullYear(), 10, 5), end: new Date(new Date().getFullYear(), 10, 10), color: EVENT_COLORS[6].id },
-  { id: "2", title: "Conference", start: new Date(new Date().getFullYear(), 10, 15), end: new Date(new Date().getFullYear(), 10, 17), color: EVENT_COLORS[4].id },
-  { id: "3", title: "Team Building", start: new Date(new Date().getFullYear(), 10, 20), end: new Date(new Date().getFullYear(), 10, 20), color: EVENT_COLORS[8].id },
-]
-
-
-type ViewMode = 'month' | 'week' | 'day'
-
-export default function EventCalendar() {
+export default function EventCalendar({ initialEvents }: EventCalendarProps) {
   const [currentDate, setCurrentDate] = React.useState(new Date())
   const [viewMode, setViewMode] = React.useState<ViewMode>('month')
-  const [events, setEvents] = React.useState<Event[]>(mockEvents)
+  const [events, setEvents] = React.useState<Event[]>(initialEvents)
   const [isAddEventOpen, setIsAddEventOpen] = React.useState(false)
+  const [nextEventId, setNextEventId] = React.useState(initialEvents.length + 1)
 
   const prevPeriod = () => {
     switch (viewMode) {
@@ -82,11 +72,9 @@ export default function EventCalendar() {
   }
 
   const getEventsForDay = (day: Date) => {
-    const normalizedDay = startOfDay(day)
+    const dayString = format(day, 'yyyy-MM-dd')
     return events.filter(event => {
-      const eventStart = startOfDay(event.start)
-      const eventEnd = startOfDay(event.end)
-      return isWithinInterval(normalizedDay, { start: eventStart, end: eventEnd })
+      return dayString >= event.start && dayString <= event.end
     })
   }
 
@@ -95,10 +83,12 @@ export default function EventCalendar() {
       return prevEvents.map(event => {
         if (event.id === eventId) {
           const daysDiff = differenceInDays(newDate, originalDate)
+          const newStart = format(addDays(parseISO(event.start), daysDiff), 'yyyy-MM-dd')
+          const newEnd = format(addDays(parseISO(event.end), daysDiff), 'yyyy-MM-dd')
           return {
             ...event,
-            start: addDays(event.start, daysDiff),
-            end: addDays(event.end, daysDiff),
+            start: newStart,
+            end: newEnd,
           }
         }
         return event
@@ -116,14 +106,20 @@ export default function EventCalendar() {
     )
   }
 
-  const handleAddEvent = (newEvent: { title: string; start: Date; end: Date; color: EventColor }) => {
+  const handleAddEvent = (newEvent: { 
+    title: string; 
+    start: string; 
+    end: string; 
+    color: EventColor 
+  }) => {
     const event: Event = {
-      id: Math.random().toString(36).substr(2, 9),
+      id: nextEventId.toString(),
       title: newEvent.title,
-      start: new Date(newEvent.start),
-      end: new Date(newEvent.end),
+      start: newEvent.start,
+      end: newEvent.end,
       color: newEvent.color
     }
+    setNextEventId(prev => prev + 1)
     setEvents(prev => [...prev, event])
   }
 
@@ -141,6 +137,7 @@ export default function EventCalendar() {
       onEventDrop: handleEventDrop,
       onEventUpdate: handleEventUpdate,
       onEventDelete: handleDelete,
+      onAddEvent: handleAddEvent,
       getEventsForDay
     }
 

@@ -1,11 +1,10 @@
-
 import type { EventColor } from "@/lib/constants"
 
 export interface Event {
   id: string
   title: string
-  start: Date
-  end: Date
+  start: string
+  end: string
   color: EventColor
 }
 

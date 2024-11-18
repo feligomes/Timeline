@@ -1,17 +1,17 @@
-
 import * as React from "react"
 import { format } from "date-fns"
 import { DroppableDay } from "./droppable-day"
 import { DraggableEvent } from "./draggable-event"
 import type { Event } from "@/types/calendar"
+import type { EventColor } from "@/lib/constants"
 
 interface MonthViewProps {
   daysToDisplay: Date[]
   currentDate: Date
-  events: Event[]
   onEventDrop: (eventId: string, originalDate: Date, newDate: Date) => void
   onEventUpdate: (eventId: string, updates: Partial<Event>) => void
   onEventDelete: (eventId: string) => void
+  onAddEvent: (event: { title: string; start: string; end: string; color: EventColor }) => void
   getEventsForDay: (day: Date) => Event[]
 }
 
@@ -21,6 +21,7 @@ export function MonthView({
   onEventDrop,
   onEventUpdate,
   onEventDelete,
+  onAddEvent,
   getEventsForDay
 }: MonthViewProps) {
   return (
@@ -32,10 +33,10 @@ export function MonthView({
       ))}
       {daysToDisplay.map(day => (
         <DroppableDay 
-          key={day.toString()} 
-          day={day} 
-          onEventDrop={onEventDrop}
+          key={format(day, 'yyyy-MM-dd')} 
+          day={day}
           currentDate={currentDate}
+          onEventDrop={onEventDrop}
         >
           <div className="text-sm font-medium">{format(day, 'd')}</div>
           <div className="mt-1 space-y-1 overflow-y-auto">
@@ -46,6 +47,7 @@ export function MonthView({
                 day={day}
                 onEventUpdate={onEventUpdate}
                 onEventDelete={onEventDelete}
+                onAddEvent={onAddEvent}
               />
             ))}
           </div>

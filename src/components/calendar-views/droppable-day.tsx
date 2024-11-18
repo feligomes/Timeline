@@ -1,4 +1,3 @@
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import * as React from "react"
@@ -9,11 +8,11 @@ import type { DragItem } from "@/types/calendar"
 interface DroppableDayProps {
   day: Date
   children: React.ReactNode
-  onEventDrop: (eventId: string, originalDate: Date, newDate: Date) => void
   currentDate: Date
+  onEventDrop: (eventId: string, originalDate: Date, newDate: Date) => void
 }
 
-export function DroppableDay({ day, children, onEventDrop, currentDate }: DroppableDayProps) {
+export function DroppableDay({ day, children, currentDate, onEventDrop }: DroppableDayProps) {
   const [{ isOver }, drop] = useDrop<DragItem, void, { isOver: boolean }>(() => ({
     accept: 'EVENT',
     drop: (item: DragItem) => {

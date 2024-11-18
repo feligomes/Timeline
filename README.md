@@ -11,10 +11,13 @@ This project implements a timeline visualization component with the following fe
 - Zoom controls for timeline navigation (Month, week, and day view options)
 - Event editing by double clicking on the event, works from all views
 - Ability to add new custom events aswell as delete existing ones
+- It correctly handles long names, showing a tooltip with the full name when hovering over the event 
+
+Technical details:
 - It comes prepopulated with 3 events added on November 2024 as a small demo, new events can be added freely
 - The data resets if you reload the page, this could have been made persistent with a real backend, using localstorage or a database
 - Left it this way also a way to easilty reset the application for testing purposes
-- It correctly handles long names, showing a tooltip with the full name when hovering over the event 
+- The calendar component receives an array of events and renders them. In the working demo it is using data from mock-data.ts file, they could be easily changed to different events to test the application. Or eventually connected to a real backend to fetch the initial data.
 
 ## Getting Started
 

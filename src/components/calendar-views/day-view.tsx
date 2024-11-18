@@ -3,6 +3,7 @@ import { format } from "date-fns"
 import { EVENT_COLORS } from "@/lib/constants"
 import { EventDialog } from "@/components/event-dialog"
 import type { Event } from "@/types/calendar"
+import type { EventColor } from "@/lib/constants"
 
 interface DayViewProps {
   daysToDisplay: Date[]
@@ -10,6 +11,7 @@ interface DayViewProps {
   onEventDrop: (eventId: string, originalDate: Date, newDate: Date) => void
   onEventUpdate: (eventId: string, updates: Partial<Event>) => void
   onEventDelete: (eventId: string) => void
+  onAddEvent: (event: { title: string; start: string; end: string; color: EventColor }) => void
   getEventsForDay: (day: Date) => Event[]
 }
 
@@ -17,6 +19,7 @@ export function DayView({
   currentDate,
   onEventUpdate,
   onEventDelete,
+  onAddEvent,
   getEventsForDay
 }: DayViewProps) {
   const [selectedEvent, setSelectedEvent] = React.useState<Event | null>(null)
@@ -46,7 +49,7 @@ export function DayView({
                 >
                   <div className="text-sm font-medium">{event.title}</div>
                   <div className="text-xs opacity-90 mt-1">
-                    {format(event.start, 'MMM d')} - {format(event.end, 'MMM d')}
+                    {format(new Date(event.start), 'MMM d')} - {format(new Date(event.end), 'MMM d')}
                   </div>
                 </div>
               )
@@ -63,6 +66,7 @@ export function DayView({
           event={selectedEvent}
           onEventUpdate={onEventUpdate}
           onEventDelete={onEventDelete}
+          onAddEvent={onAddEvent}
         />
       )}
     </>

@@ -4,16 +4,20 @@ import * as React from "react"
 import { useDrag } from 'react-dnd'
 import { EVENT_COLORS } from "@/lib/constants"
 import { EventDialog } from "@/components/event-dialog"
+import type { Event } from "@/types/calendar"
+import type { EventColor } from "@/lib/constants"
 
 interface DraggableEventProps {
-  event: any
+  event: Event
   day: Date
-  onEventUpdate: (eventId: string, updates: any) => void
+  onEventUpdate: (eventId: string, updates: Partial<Event>) => void
   onEventDelete: (eventId: string) => void
+  onAddEvent: (event: { title: string; start: string; end: string; color: EventColor }) => void
 }
 
-export function DraggableEvent({ event, day, onEventUpdate, onEventDelete }: DraggableEventProps) {
+export function DraggableEvent({ event, day, onEventUpdate, onEventDelete, onAddEvent }: DraggableEventProps) {
   const [isEditing, setIsEditing] = React.useState(false)
+  
   const [{ isDragging }, drag] = useDrag(() => ({
     type: 'EVENT',
     item: { eventId: event.id, originalDate: day },
@@ -45,6 +49,7 @@ export function DraggableEvent({ event, day, onEventUpdate, onEventDelete }: Dra
         onOpenChange={setIsEditing}
         onEventUpdate={onEventUpdate}
         onEventDelete={onEventDelete}
+        onAddEvent={onAddEvent}
       />
     </>
   )

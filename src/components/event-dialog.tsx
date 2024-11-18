@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { format } from "date-fns"
+import { format, parseISO } from "date-fns"
 import { CalendarIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
@@ -27,14 +27,24 @@ interface EventDialogProps {
   mode: 'add' | 'edit'
   open: boolean
   onOpenChange: (open: boolean) => void
-  onAddEvent?: (event: { title: string; start: Date; end: Date; color: EventColor }) => void
-  onEventUpdate?: (eventId: string, updates: Partial<{ title: string; start: Date; end: Date; color: EventColor }>) => void
+  onAddEvent: (event: { 
+    title: string
+    start: string  
+    end: string   
+    color: EventColor 
+  }) => void
+  onEventUpdate?: (eventId: string, updates: Partial<{ 
+    title: string
+    start: string
+    end: string
+    color: EventColor 
+  }>) => void
   onEventDelete?: (eventId: string) => void
   event?: {
     id: string
     title: string
-    start: Date
-    end: Date
+    start: string
+    end: string
     color: EventColor
   }
 }
@@ -55,7 +65,10 @@ export function EventDialog({
   React.useEffect(() => {
     if (mode === 'edit' && event) {
       setTitle(event.title)
-      setDateRange({ from: event.start, to: event.end })
+      setDateRange({ 
+        from: parseISO(event.start), 
+        to: parseISO(event.end) 
+      })
       setSelectedColor(event.color)
     } else {
       setTitle("")
@@ -70,11 +83,8 @@ export function EventDialog({
       return
     }
 
-    const start = new Date(dateRange.from)
-    start.setHours(0, 0, 0, 0)
-    
-    const end = new Date(dateRange.to)
-    end.setHours(23, 59, 59, 999)
+    const start = format(dateRange.from, 'yyyy-MM-dd')
+    const end = format(dateRange.to, 'yyyy-MM-dd')
 
     if (mode === 'add' && onAddEvent) {
       onAddEvent({ title, start, end, color: selectedColor })
